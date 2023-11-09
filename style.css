@@ -1,0 +1,19 @@
+h1 {
+    width: 50%;         
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;  
+  }
+  
+  
+  #menu-links {
+      display: flex; 
+      flex-direction: row; 
+      align-items: center;  
+      justify-content: center;
+      gap: 10px; 
+    }
+  
+    .centered-table {
+      padding-top: 20px;
+    }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Users</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script src="main.js"></script>
+</head>
+<body onload='browseUsers()'>
+    <h1>Users</h1>
+    <div id="browse">
+        <nav id="menu-links">
+            <a href="developer.html">Developers</a>
+            <a href="game.html">Games</a>
+            <a href="user.html" class="active">Users</a>
+            <a href="review.html">Reviews</a>
+            <a href="users-games.html">Stats</a>
+        </nav>
+    
+        <input class="btn" type="button" id="addUser" value="Add New User" onclick="AddUsers()">
+        <table class="centered-table" border="1" cellpadding="5">
+            <tr>
+                <th>id</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>JohnDoe</td>
+                <td>johndoe@example.com</td>
+                <td>2022-05-16</td>
+                <td>
+                    <a href="#" onclick="editUser('JohnDoe')">Edit</a> |
+                    <a href="#" onclick="deleteUser('JohnDoe')">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>JaneSmith</td>
+                <td>janesmith@example.com</td>
+                <td>2022-06-20</td>
+                <td>
+                    <a href="#" onclick="editUser('JaneSmith')">Edit</a> |
+                    <a href="#" onclick="deleteUser('JaneSmith')">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>AliceBrown</td>
+                <td>alicebrown@example.com</td>
+                <td>2023-01-10</td>
+                <td>
+                    <a href="#" onclick="editUser('AliceBrown')">Edit</a> |
+                    <a href="#" onclick="deleteUser('AliceBrown')">Delete</a>
+                </td>
+            </tr> 
+        </table>
+    </div>
+    <p>&nbsp;</p>
+    <div id="editDisplay" style="display:none;">
+        <form method="POST" id="updateUser">
+            <fieldset class="fields">
+                <legend><strong>Update User</strong></legend>
+                <label>User Name</label> <input type="text" name="uname" id="updateUserName" value="">
+                <label>Email</label> <input type="email" name="email" id="updateEmail" value="">
+                <label>Registration Date</label> <input type="date" name="regdate" id="updateRegDate" value="">
+                <input type="hidden" name="userID" id="updateUserID" value="">
+            </fieldset>
+            <input class="btn" type="submit" id="submitUpdate" value="Submit">
+            <input class="btn" type="button" value="Cancel" onClick="browseUsers()">
+        </form>
+    </div>
+</body>
+</html>

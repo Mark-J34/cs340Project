@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>People</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script src="main.js"></script>
+</head>
+<body onload='browse()'>
+    <h1>Games</h1>
+    <div id="show">
+        <nav id="menu-links">
+            <a href="developer.html">Developers</a>
+            <a href="game.html">Games</a>
+            <a href="user.html">Users</a>
+            <a href="review.html">Reviews</a>
+            <a href="users-games.html">Stats</a>
+        </nav>
+    
+        <input class="btn" type="button" id="addGame" value="Add New Game" onclick="AddGame()">
+        <table class="centered-table" border="1" cellpadding="5">
+            <tr>
+                <th>id</th>
+                <th>Game Name</th>
+                <th>Genre</th>
+                <th>Release Date</th>
+                <th>Developer</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Space Invaders</td>
+                <td>Action</td>
+                <td>1978-06-01</td>
+                <td>Ubisoft</td>
+                <td>
+                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="deleteGames()">Delete</a>
+                  </td>   
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>The Legend of Zelda</td>
+                <td>Adventure</td>
+                <td>1986-02-21</td>
+                <td>Valve Corporation</td>
+                <td>
+                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="deleteGames()">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Super Mario Bros.</td>
+                <td>Adventure</td>
+                <td>1985-09-13</td>
+                <td>Nintendo</td>
+                <td>
+                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="deleteGames()">Delete</a>
+                </td>
+            </tr> 
+        </table>
+    </div>
+    <p>&nbsp;</p>
+    <div id="editDisplay">
+        <form method="POST" id="updateGame">
+            <fieldset class="fields">
+                <legend><strong>Update Game</strong></legend>
+                <label>id 1 </label><input type="hidden" name="idGame" id="updatedgameid">
+                <label>Game</label> <input type="text" name="title" value="Space Invaders">
+                <label>Release Date</label> <input type="text" name="releaseDate" value="1978-06-01"
+                <label>Genre</label> <input type="text" name="genre" value="Adventure">
+            </fieldset>
+            <input class="btn" type="submit" id="addGame" value="Submit" onclick="addGame()">
+            <input class="btn" type="button" value="cancel" onClick="browse()">
+        </form>
+    </div>
+</body>

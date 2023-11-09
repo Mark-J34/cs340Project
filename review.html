@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reviews</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script src="main.js"></script>
+</head>
+<body onload='browse()'>
+    <h1>Game Reviews</h1>
+    <div id="show">
+        <nav id="menu-links">
+            <a href="developer.html">Developers</a>
+            <a href="game.html">Games</a>
+            <a href="user.html">Users</a>
+            <a href="review.html">Reviews</a>
+            <a href="users-games.html">Stats</a>
+        </nav>
+        <input type="button" id="add" value="Add New Review" onclick="AddReview()">
+        <label>Filter By Game</label> <select name="games" onchange="filterByGame()">
+            <option value="0">&nbsp;</option>
+            <option value="1">The Legend Of Zelda</option>
+            <option value="2">Super Mario Bros.</option>
+            <option value="3">Space Invaders</option>
+        </select>
+        </select>
+        <table class="centered-table" border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Game Title</th>
+                    <th>User Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reviewTableBody">
+                <tr>
+                    <td>1</td>
+                    <td>Super Mario Bros.</td>
+                    <td>JohnDoe</td>
+                    <td>8</td>
+                    <td>Classic game, love it!</td>
+                    <td>
+                        <a href="#" onclick="edit()">Edit</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>The Legend of Zelda</td>
+                    <td>JaneSmith</td>
+                    <td>10</td>
+                    <td>Best game ever!</td>
+                    <td>
+                        <a href="#" onclick="edit()">Edit</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Space Invaders</td>
+                    <td>Null</td>
+                    <td>7</td>
+                    <td>Really challenging!</td>
+                    <td>
+                        <a href="#" onclick="edit()">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="editDisplay">
+        <form method="POST" id="updateReview">
+            <fieldset class="fields">
+                <legend><strong>Update Review</strong></legend>
+                <label>Game Title</label> 
+                <select name="game">
+                    <option value="0">&nbsp;</option>
+                    <option value="1" selected>The Legend of Zelda</option>
+                    <option value="2">Super Mario Bros.</option>
+                    <option value="3">Space Invaders</option>
+                    </select>
+
+                    <label>User Name</label> 
+                    <select name="user" id="selectUser">
+                        <option value="0">&nbsp;</option>
+                        <option value="1">JohnDoe</option>
+                        <option value="2">JaneSmith</option>
+                        <option value="3">AliceBrown</option>
+                    </select>
+
+                <label>Rating</label> 
+                <input type="number" name="rating" min="1" max="10">
+
+                <label>Comment</label> 
+                <textarea name="comment"></textarea>
+                <input type="hidden" name="reviewID" id="updateReviewID" value="">
+
+            </fieldset>
+            <input class="btn" type="submit" id="submitReviewUpdate" value="Submit">
+            <input class="btn" type="button" value="Cancel" onClick="browse()">
+        </form>
+    </div>
+</body>
+</html>
+</body>
+</html>
