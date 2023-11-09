@@ -4,53 +4,56 @@
     <title>Game Stats</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="main.js"></script>
-    <h1>Game Stats</h1>
 </head>
 <body onload='browse()'>
-    
+    <h1>Game Stats</h1>
     <div id="show">
         <nav id="menu-links">
             <a href="developer.html">Developers</a>
             <a href="game.html">Games</a>
             <a href="user.html">Users</a>
             <a href="review.html">Reviews</a>
-            <a href="users-games.html">Stats</a>
+            <a href="users-games.html" class="active">Stats</a>
         </nav>
 
-        <div id="show">
-            <h2>Popular Games Based on Ownership</h2>
-
-            <button onclick="addGameOwner()">Add</button>
-            <button onclick="editGameOwner()">Edit</button>
-            <button onclick="deleteGameOwner()">Delete</button>
-
-            <table class="centered-table" border="1" cellpadding="5">
-                <thead>
-                    <tr>
-                        <th>Game Title</th>
-                        <th>Ownership Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Super Mario Bros.</td>
-                        <td>87</td>
-                    </tr>
-                    <tr>
-                        <td>The Legend of Zelda</td>
-                        <td>74</td>
-                    </tr>
-                    <tr>
-                        <td>Space Invaders</td>
-                        <td>65</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
+        <button onclick="sortByPopularity()">Sort by Popularity</button>
+        <button onclick="sortByRating()">Sort By Rating</button>
         
-
-       
+        <table class="centered-table" border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Game Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>JohnDoe</td>
+                    <td>Super Mario Bros.</td>
+                    <td>
+                        <button onclick="editGameOwner('JohnDoe', 'Super Mario Bros.')">Edit</button>
+                        <button onclick="deleteGameOwner('JohnDoe', 'Super Mario Bros.')">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>JaneSmith</td>
+                    <td>The Legend of Zelda</td>
+                    <td>
+                        <button onclick="editGameOwner('JaneSmith', 'The Legend of Zelda')">Edit</button>
+                        <button onclick="deleteGameOwner('JaneSmith', 'The Legend of Zelda')">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>AliceBrown</td>
+                    <td>Space Invaders</td>
+                    <td>
+                        <button onclick="editGameOwner('AliceBrown', 'Space Invaders')">Edit</button>
+                        <button onclick="deleteGameOwner('AliceBrown', 'Space Invaders')">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
