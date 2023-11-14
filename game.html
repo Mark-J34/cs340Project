@@ -16,7 +16,7 @@
             <a href="users-games.html">Stats</a>
         </nav>
     
-        <input class="btn" type="button" id="addGame" value="Add New Game" onclick="AddGame()">
+        <input class="btn" type="button" id="addGame" value="Add New Game" onclick="addGame()">
         <table class="centered-table" border="1" cellpadding="5">
             <tr>
                 <th>id</th>
@@ -33,7 +33,7 @@
                 <td>1978-06-01</td>
                 <td>Ubisoft</td>
                 <td>
-                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="editGame()">Edit</a> |
                     <a href="#" onclick="deleteGames()">Delete</a>
                   </td>   
             </tr>
@@ -44,7 +44,7 @@
                 <td>1986-02-21</td>
                 <td>Valve Corporation</td>
                 <td>
-                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="editGame()">Edit</a> |
                     <a href="#" onclick="deleteGames()">Delete</a>
                 </td>
             </tr>
@@ -55,14 +55,14 @@
                 <td>1985-09-13</td>
                 <td>Nintendo</td>
                 <td>
-                    <a href="#" onclick="edit()">Edit</a> |
+                    <a href="#" onclick="editGame()">Edit</a> |
                     <a href="#" onclick="deleteGames()">Delete</a>
                 </td>
             </tr> 
         </table>
     </div>
     <p>&nbsp;</p>
-    <div id="editDisplay">
+    <div id="edit">
         <form method="POST" id="updateGame">
             <fieldset class="fields">
                 <legend><strong>Update Game</strong></legend>
@@ -71,7 +71,7 @@
                 <label>Release Date</label> <input type="text" name="releaseDate" value="1978-06-01"
                 <label>Genre</label> <input type="text" name="genre" value="Adventure">
             </fieldset>
-            <input class="btn" type="submit" id="addGame" value="Submit" onclick="addGame()">
+            <input class="btn" type="submit" id="addGame" value="Submit">
             <input class="btn" type="button" value="cancel" onClick="browse()">
         </form>
     </div>
