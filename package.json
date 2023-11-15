@@ -1,0 +1,25 @@
+{
+  "name": "cs340project",
+  "version": "1.0.0",
+  "description": "Gamehub project for cs 340",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mark-J34/cs340Project.git"
+  },
+  "author": "Prabhash, Mark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mark-J34/cs340Project/issues"
+  },
+  "homepage": "https://github.com/Mark-J34/cs340Project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "forever": "^4.0.3",
+    "mysql": "^2.18.1"
+  }
+}
