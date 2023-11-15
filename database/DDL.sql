@@ -40,7 +40,7 @@ CREATE TABLE users (
 -- Table for Reviews
 CREATE TABLE reviews (
     idReview INT AUTO_INCREMENT PRIMARY KEY,
-    idGame INT NOT NULL,
+    idGame INT,
     idUser INT,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 10),
     comment TEXT NOT NULL,

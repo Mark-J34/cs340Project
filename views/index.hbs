@@ -4,7 +4,7 @@
 <p>If you see this text, the server is <strong>definitely</strong> working!</p>
 
 {{!-- Create a table --}}
-<table>
+<table id="game-table">
 
     {{!-- Header section --}}
     <thead>
@@ -17,20 +17,48 @@
                 {{@key}}
             </th>
             {{/each}}
+            <th>Delete</th>
         </tr>
     </thead>
 
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        
         {{#each data}}
-        <tr>
+        <tr data-value={{this.id}}>
+            <td>{{this.idGame}}</td>
             <td>{{this.title}}</td>
             <td>{{this.releaseDate}}</td>
             <td>{{this.genre}}</td>
             <td>{{this.developerName}}</td>
+            <td><button onclick="deleteGame({{this.idGame}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+<script src="./js/delete_game.js"></script>
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add Game</h2>
+<form id="add-game-form" method="POST" action="/add-game">
+    <label for="input-title">Title: </label>
+    <input type="text" name="input-title" id="input-title">
+    
+    <label for="input-date">Release Date: </label>
+    <input type="date" name="input-date" id="input-date">
+
+    <label for="input-genre">Genre: </label>
+    <input type="text" name="input-genre" id="input-genre">
+
+    <label for="input-developer">Developer: </label>
+    <select name="input-developer" id="input-developer">
+        <option value="">Select a Developer</option>
+        {{#each developers}}
+        <option value="{{this.idDeveloper}}">{{this.name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
