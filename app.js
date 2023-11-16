@@ -165,7 +165,7 @@ app.post('/add-user-game', function(req, res) {
             console.error(error);
             return res.sendStatus(500);
         }
-        res.redirect('/user-games'); 
+        res.redirect('/stats'); 
     });
 });
 /*

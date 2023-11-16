@@ -14,7 +14,6 @@
             <li><a href="/users">Users</a></li>
             <li><a href="/reviews">Reviews</a></li>
             <li><a href="/">Games</a></li>
-            <li><a href="/user-games">Stats</a></li>
         </ul>
     </nav>
 
@@ -37,6 +36,7 @@
         </tbody>
     </table>
 
+    <h2>Add</h2>
     <!-- Form for adding a new user-game relationship -->
     <form action="/add-user-game" method="post">
         <label for="input-user">Select User:</label>
@@ -52,7 +52,7 @@
         <select name="gameId" id="game-select">
             <option value="">Select Game</option>
             {{#each games}}
-                <option value="{{this.idGame}}">{{this.idUser}}</option>
+                <option value="{{this.idGame}}">{{this.title}}</option>
             {{/each}}
         </select>
 
