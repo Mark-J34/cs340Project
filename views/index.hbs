@@ -1,64 +1,71 @@
-{{!-- Just some plain text --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to your CSS file (if you have one) -->
+    <link rel="stylesheet" href="/css/style.css">
+    <h1>Games</h1>
+</head>
+<body>
 
-<h1>The server is running!</h1>
-<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+    <!-- Navigation bar -->
+    <nav id="navigation-links">
+        <ul>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/games">Games</a></li>
+            <li><a href="/stats">Stats</a></li>
+        </ul>
+    </nav>
 
-{{!-- Create a table --}}
-<table id="game-table">
-
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
+   
+    <table id="game-table">
+        <thead>
+            <tr>
+                {{#each data.[0]}}
+                    <th>{{@key}}</th>
+                {{/each}}
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+            <tr data-value={{this.idGame}}>
+                <td>{{this.idGame}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.releaseDate}}</td>
+                <td>{{this.genre}}</td>
+                <td>{{this.developerName}}</td>
+                <td><button onclick="deleteGame({{this.idGame}})">Delete</button></td>
+            </tr>
             {{/each}}
-            <th>Delete</th>
-        </tr>
-    </thead>
+        </tbody>
+    </table>
+    <script src="./js/delete_game.js"></script>
 
-    {{!-- Body section --}}
-    <tbody>
-
+    <h2>Add Game</h2>
+    <form id="add-game-form" method="POST" action="/add-game">
+        <label for="input-title">Title: </label>
+        <input type="text" name="input-title" id="input-title">
         
-        {{#each data}}
-        <tr data-value={{this.id}}>
-            <td>{{this.idGame}}</td>
-            <td>{{this.title}}</td>
-            <td>{{this.releaseDate}}</td>
-            <td>{{this.genre}}</td>
-            <td>{{this.developerName}}</td>
-            <td><button onclick="deleteGame({{this.idGame}})">Delete</button></td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-<script src="./js/delete_game.js"></script>
+        <label for="input-date">Release Date: </label>
+        <input type="date" name="input-date" id="input-date">
 
-{{!-- Form to add a record to the table  --}}
-<h2>Add Game</h2>
-<form id="add-game-form" method="POST" action="/add-game">
-    <label for="input-title">Title: </label>
-    <input type="text" name="input-title" id="input-title">
-    
-    <label for="input-date">Release Date: </label>
-    <input type="date" name="input-date" id="input-date">
+        <label for="input-genre">Genre: </label>
+        <input type="text" name="input-genre" id="input-genre">
 
-    <label for="input-genre">Genre: </label>
-    <input type="text" name="input-genre" id="input-genre">
+        <label for="input-developer">Developer: </label>
+        <select name="input-developer" id="input-developer">
+            <option value="">Select a Developer</option>
+            {{#each developers}}
+                <option value="{{this.idDeveloper}}">{{this.name}}</option>
+            {{/each}}
+        </select>
 
-    <label for="input-developer">Developer: </label>
-    <select name="input-developer" id="input-developer">
-        <option value="">Select a Developer</option>
-        {{#each developers}}
-        <option value="{{this.idDeveloper}}">{{this.name}}</option>
-        {{/each}}
-    </select>
+        <input type="submit">
+    </form>
 
-    <input type="submit">
-</form>
+</body>
+</html>
 

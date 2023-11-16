@@ -1,0 +1,29 @@
+/* Styles for the navigation bar */
+#navigation-links {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 50px;
+}
+
+#navigation-links ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px; 
+}
+
+
+
+#navigation-links a {
+    text-decoration: none;
+    color: black; 
+   
+}
+
+h1 {
+    text-align: center;
+}
+

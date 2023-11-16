@@ -43,6 +43,38 @@ app.get('/', function(req, res)
         })                                                      
     }); 
 
+    app.get('/reviews', (req, res) => {
+        let query = `SELECT reviews.idReview, games.title AS gameTitle, developers.name AS developerName, reviews.comment
+             FROM reviews
+             JOIN games ON reviews.idGame = games.idGame
+             JOIN developers ON games.idDeveloper = developers.idDeveloper;`;
+    
+        db.pool.query(query, (error, rows, fields) => {
+            if (error) {
+                console.error(error);
+                res.sendStatus(500);
+            } else {
+                let reviews = rows;
+                res.render('reviews', { reviews: reviews });
+            }
+        });
+    });
+    
+    // Route for "Reviews" link
+    app.get('/reviews', (req, res) => {
+       
+    });
+    
+    // Route for "Games" link
+    app.get('/games', (req, res) => {
+    
+    });
+    
+    // Route for "Stats" link
+    app.get('/stats', (req, res) => {
+       
+    });
+
 app.post('/add-game', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
