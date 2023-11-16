@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>User-Games Relationships</title>
+</head>
+<body>
+    <h1>Stats</h1>
+
+    <nav id="navigation-links">
+        <ul>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/">Games</a></li>
+            <li><a href="/user-games">Stats</a></li>
+        </ul>
+    </nav>
+
+    
+
+        <table>
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Game Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each userGames}}
+                <tr>
+                    <td>{{this.userName}}</td>
+                    <td>{{this.gameTitle}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Form for adding a new user-game relationship -->
+    <form action="/add-user-game" method="post">
+        <label for="input-user">Select User:</label>
+        <select name="userId" id="input-user">
+            <option value="">Select a User</option>
+            {{#each users}}
+                <option value="{{this.idUser}}">{{this.userName}}</option>
+            {{/each}}
+        </select>
+
+
+        <label for="game-select">Select Game:</label>
+        <select name="gameId" id="game-select">
+            <option value="">Select Game</option>
+            {{#each games}}
+                <option value="{{this.idGame}}">{{this.idUser}}</option>
+            {{/each}}
+        </select>
+
+        <input type="submit" value="Add Relationship">
+    </form>
+  
+</body>
+</html>
+
+

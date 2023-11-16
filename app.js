@@ -60,20 +60,12 @@ app.get('/', function(req, res)
         });
     });
     
-    // Route for "Reviews" link
-    app.get('/reviews', (req, res) => {
-       
-    });
     
     // Route for "Games" link
     app.get('/games', (req, res) => {
     
     });
     
-    // Route for "Stats" link
-    app.get('/stats', (req, res) => {
-       
-    });
 
 app.post('/add-game', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
@@ -115,6 +107,67 @@ app.delete('/delete-game/', function(req,res,next){
   
               
   })});
+
+
+  app.get('/stats', function(req, res) {
+    // Query to fetch user-game relationships
+    let query1 = `SELECT users.userName AS userName, games.title AS gameTitle 
+                                FROM gameHasUsers 
+                                JOIN users ON gameHasUsers.idUser = users.idUser
+                                JOIN games ON gameHasUsers.idGame = games.idGame`;
+
+    // Query to fetch all users
+    let query2 = `SELECT idUser, userName FROM users`;
+
+    // Query to fetch all games
+    let query3 = `SELECT idGame, title FROM games`;
+
+    // Execute the first query
+    db.pool.query(query1, function(error, userGamesResults) {
+        if (error) {
+            console.error(error);
+            return res.sendStatus(500);
+        }
+
+        // Execute the second query
+        db.pool.query(query2, function(error, usersResults) {
+            if (error) {
+                console.error(error);
+                return res.sendStatus(500);
+            }
+
+            // Execute the third query
+            db.pool.query(query3, function(error, gamesResults) {
+                if (error) {
+                    console.error(error);
+                    return res.sendStatus(500);
+                }
+
+                // Render the stats view with all necessary data
+                res.render('stats', { 
+                    userGames: userGamesResults,
+                    users: usersResults,
+                    games: gamesResults 
+                });
+            });
+        });
+    });
+});
+
+
+app.post('/add-user-game', function(req, res) {
+    let userId = req.body.userId;
+    let gameId = req.body.gameId;
+    let insertQuery = 'INSERT INTO gameHasUsers (idUser, idGame) VALUES (?, ?)';
+
+    db.pool.query(insertQuery, [userId, gameId], function(error, results) {
+        if (error) {
+            console.error(error);
+            return res.sendStatus(500);
+        }
+        res.redirect('/user-games'); 
+    });
+});
 /*
     LISTENER
 */

@@ -14,7 +14,7 @@
         <ul>
             <li><a href="/users">Users</a></li>
             <li><a href="/reviews">Reviews</a></li>
-            <li><a href="/games">Games</a></li>
+            <li><a href="/">Games</a></li>
             <li><a href="/stats">Stats</a></li>
         </ul>
     </nav>
@@ -26,6 +26,7 @@
                 <th>Game Title</th>
                 <th>Developer Name</th>
                 <th>Review</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
                 <td>{{this.gameTitle}}</td>
                 <td>{{this.developerName}}</td>
                 <td>{{this.comment}}</td>
+                <td><button onclick="editReview({{this.idReview}})">Edit</button></td>
             </tr>
             {{/each}}
         </tbody>
