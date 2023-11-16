@@ -111,7 +111,7 @@ app.delete('/delete-game/', function(req,res,next){
 
   app.get('/stats', function(req, res) {
     // Query to fetch user-game relationships
-    let query1 = `SELECT users.userName AS userName, games.title AS gameTitle 
+    let query1 = `SELECT users.idUser AS userId, games.idGame AS gameId, users.userName AS userName, games.title AS gameTitle 
                                 FROM gameHasUsers 
                                 JOIN users ON gameHasUsers.idUser = users.idUser
                                 JOIN games ON gameHasUsers.idGame = games.idGame`;
@@ -168,6 +168,25 @@ app.post('/add-user-game', function(req, res) {
         res.redirect('/stats'); 
     });
 });
+
+app.delete('/delete-user-game', function(req, res, next){
+    let data = req.body;
+    let userId = parseInt(data.idUser);
+    let gameId = parseInt(data.idGame);
+    let delete_user_game = `DELETE FROM gameHasUsers WHERE idUser = ? AND idGame = ?`;
+  
+    // Run the query
+    db.pool.query(delete_user_game, [userId, gameId], function(error, rows, fields){
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.sendStatus(204); 
+        }
+    });
+});
+
+
 /*
     LISTENER
 */

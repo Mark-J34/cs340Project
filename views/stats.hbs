@@ -19,25 +19,33 @@
 
     
 
-        <table>
+        <table id="user-games-table">
         <thead>
             <tr>
+                <th>User Id</th>
                 <th>User Name</th>
+                <th>Game Id</th>
                 <th>Game Title</th>
             </tr>
         </thead>
-        <tbody>
-            {{#each userGames}}
-                <tr>
-                    <td>{{this.userName}}</td>
-                    <td>{{this.gameTitle}}</td>
-                </tr>
-            {{/each}}
-        </tbody>
+     <tbody>
+    {{#each userGames}}
+        <tr>
+            <td>{{this.userId}}</td>
+            <td>{{this.userName}}</td>
+            <td>{{this.gameId}}</td>
+            <td>{{this.gameTitle}}</td>
+            <td><button onclick="deleteUserGame({{this.userId}}, {{this.gameId}})">Delete</button></td>
+            <td><button onclick="editUserGame('{{this.userId}}', '{{this.gameId}}')">Edit</button></td>
+            
+        </tr>
+    {{/each}}
+    </tbody>
+
     </table>
+    <script src="./js/deleteUserGame.js"></script>
 
     <h2>Add</h2>
-    <!-- Form for adding a new user-game relationship -->
     <form action="/add-user-game" method="post">
         <label for="input-user">Select User:</label>
         <select name="userId" id="input-user">
@@ -47,18 +55,19 @@
             {{/each}}
         </select>
 
-
-        <label for="game-select">Select Game:</label>
+        <label for="gameId">Select Game:</label>
         <select name="gameId" id="game-select">
             <option value="">Select Game</option>
             {{#each games}}
-                <option value="{{this.idGame}}">{{this.title}}</option>
+                <option value="{{this.idGame}}">{{this.title}}</option>    
             {{/each}}
         </select>
 
-        <input type="submit" value="Add Relationship">
+    <input type="submit">
     </form>
-  
+
+
+
 </body>
 </html>
 
