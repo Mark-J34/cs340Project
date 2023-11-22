@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>Edit User-Game Relationship</h1>
+    <form action="/updateUserGame" method="post">
+        <p>User ID: {{userId}}</p>
+        <p>Game ID: {{gameId}}</p>
+
+        <input type="hidden" name="userId" value="{{userId}}">
+        <input type="hidden" name="gameId" value="{{gameId}}">
+
+        <label for="userName">User Name:</label>
+      
+
+        <label for="gameTitle">Game Title:</label>
+        
+
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

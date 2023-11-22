@@ -17,36 +17,37 @@
         </ul>
     </nav>
 
-    
-
-        <table id="user-games-table">
+    <table id="user-game-table">
         <thead>
             <tr>
-                <th>User Id</th>
-                <th>User Name</th>
-                <th>Game Id</th>
+                <th>Id</th>
                 <th>Game Title</th>
+                <th>User Name</th>  
             </tr>
         </thead>
-     <tbody>
-    {{#each userGames}}
-        <tr>
-            <td>{{this.userId}}</td>
-            <td>{{this.userName}}</td>
-            <td>{{this.gameId}}</td>
-            <td>{{this.gameTitle}}</td>
-            <td><button onclick="deleteUserGame({{this.userId}}, {{this.gameId}})">Delete</button></td>
-            <td><button onclick="editUserGame('{{this.userId}}', '{{this.gameId}}')">Edit</button></td>
-            
-        </tr>
-    {{/each}}
-    </tbody>
-
+            <tbody>
+        {{#each userGames}}
+            <tr data-value1="{{this.gameId}}" data-value2="{{this.userId}}">
+                <td>{{this.gameId}}{{this.userId}}</td>
+                <td>{{this.gameTitle}}</td>
+                <td>{{this.userName}}</td>
+                <td><button onclick="deleteUserGame({{this.userId}}, {{this.gameId}})">Delete</button></td>
+            </tr>
+        {{/each}}
+        </tbody>
     </table>
     <script src="./js/deleteUserGame.js"></script>
 
     <h2>Add</h2>
     <form action="/add-user-game" method="post">
+         <label for="gameId">Select Game:</label>
+        <select name="gameId" id="game-select">
+            <option value="">Select Game</option>
+            {{#each games}}
+                <option value="{{this.idGame}}">{{this.title}}</option>    
+            {{/each}}
+        </select>
+
         <label for="input-user">Select User:</label>
         <select name="userId" id="input-user">
             <option value="">Select a User</option>
@@ -55,16 +56,32 @@
             {{/each}}
         </select>
 
-        <label for="gameId">Select Game:</label>
-        <select name="gameId" id="game-select">
-            <option value="">Select Game</option>
-            {{#each games}}
-                <option value="{{this.idGame}}">{{this.title}}</option>    
-            {{/each}}
-        </select>
+    <input type="submit">
+    </form>
+
+    <h2>Edit User-Game Relationship</h2>
+
+    <form id="update-user-game">
+    <!-- User id and Game id dropdown -->
+     <label for="userGameId">Select a User-Game Relationship:</label>
+    <select name="userGameId" id="userGameId">
+        {{#each userGames}}
+            <option value="{{this.gameId}}-{{this.userId}}">{{this.gameId}} - {{this.userId}}</option>
+        {{/each}}
+    </select>
+
+    <!-- Game Selection Dropdown -->
+    <label for="gameId">Select a Game:</label>
+    <select name="gameId" id="gameId">
+        {{#each games}}
+            <option value="{{this.idGame}}">{{this.title}}</option>
+        {{/each}}
+    </select>
 
     <input type="submit">
     </form>
+
+    <script src="./js/updateUserGame.js"></script>
 
 
 

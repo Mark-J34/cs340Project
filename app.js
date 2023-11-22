@@ -1,71 +1,53 @@
 /*
-    SETUP
+    Express Application Setup
 */
-
-// Express
 var express = require('express');
 var app = express();
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(express.static('public'))
-PORT = 3003;
 
-// Database
+// Middleware setup
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+// Port configuration
+const PORT = 8101;
+
+// Database configuration
 var db = require('./database/db-connector');
 
-// Handlebars
+// Handlebars setup
 const { engine } = require('express-handlebars');
-var exphbs = require('express-handlebars');     // Import express-handlebars
-app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
-app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
+app.engine('.hbs', engine({ extname: '.hbs' }));
+app.set('view engine', '.hbs');
 
 /*
-    ROUTES
+    Routes Configuration
 */
-app.get('/', function(req, res)
-    {  
-        let query1 = `SELECT games.idGame, games.title, games.releaseDate, games.genre, developers.name AS developerName 
-        FROM games 
-        INNER JOIN developers ON games.idDeveloper = developers.idDeveloper;`; 
-        
-        let query2 = 'SELECT * From developers'
 
-        db.pool.query(query1, function(error, rows, fields){    
+// Routes for games page
+app.get('/', function(req, res) {
+    let gamesQuery = `SELECT games.idGame, games.title, games.releaseDate, games.genre, developers.name AS developerName 
+                      FROM games 
+                      JOIN developers ON games.idDeveloper = developers.idDeveloper;`;
 
-            let games = rows;
+    let developersQuery = 'SELECT * FROM developers';
 
-            db.pool.query(query2, (error, rows, fields) => {
+    db.pool.query(gamesQuery, function(error, games) {
+        if (error) {
+            console.error(error);
+            return res.sendStatus(500);
+        }
 
-                let developers = rows;
-                return res.render('index', {data: games, developers: developers});
-            })
-                  
-        })                                                      
-    }); 
-
-    app.get('/reviews', (req, res) => {
-        let query = `SELECT reviews.idReview, games.title AS gameTitle, developers.name AS developerName, reviews.comment
-             FROM reviews
-             JOIN games ON reviews.idGame = games.idGame
-             JOIN developers ON games.idDeveloper = developers.idDeveloper;`;
-    
-        db.pool.query(query, (error, rows, fields) => {
+        db.pool.query(developersQuery, (error, developers) => {
             if (error) {
                 console.error(error);
-                res.sendStatus(500);
-            } else {
-                let reviews = rows;
-                res.render('reviews', { reviews: reviews });
+                return res.sendStatus(500);
             }
+
+            res.render('index', { data: games, developers: developers });
         });
     });
-    
-    
-    // Route for "Games" link
-    app.get('/games', (req, res) => {
-    
-    });
-    
+});
 
 app.post('/add-game', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
@@ -76,91 +58,125 @@ app.post('/add-game', function(req, res) {
 
     // Run the query on your database
     db.pool.query(query, function(error, rows, fields) {
-        // Check for an error
         if (error) {
-            // Log the error and send a bad request response
             console.log(error);
             res.sendStatus(400);
         } else {
-            // Redirect to the root route (or another route as needed)
             res.redirect('/');
         }
     });
 });
 
-app.delete('/delete-game/', function(req,res,next){
-    let data = req.body;
-    let gameID = parseInt(data.idGame);
-    let delete_game = `DELETE FROM games WHERE idGame = ?`;
+
+app.delete('/delete-game', function(req, res) {
+    let gameID = parseInt(req.body.idGame);
+    let deleteGameQuery = `DELETE FROM games WHERE idGame = ?`;
   
-          // Run the 1st query
-          db.pool.query(delete_game, [gameID], function(error, rows, fields){
-              if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
-              res.sendStatus(400);
-              } else {
+    db.pool.query(deleteGameQuery, [gameID], function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/');
+        }
+    });
+});
 
-                res.redirect('/');
-              }
-  
-              
-  })});
+// Routes for review page
+app.get('/reviews', (req, res) => {
+    let reviewsQuery = `SELECT reviews.idReview, games.title AS gameTitle, developers.name AS developerName, reviews.comment
+                        FROM reviews
+                        JOIN games ON reviews.idGame = games.idGame
+                        JOIN developers ON games.idDeveloper = developers.idDeveloper;`;
+
+    db.pool.query(reviewsQuery, (error, reviews) => {
+        if (error) {
+            console.error(error);
+            res.sendStatus(500);
+        } else {
+            res.render('reviews', { reviews: reviews });
+        }
+    });
+});
 
 
-  app.get('/stats', function(req, res) {
-    // Query to fetch user-game relationships
-    let query1 = `SELECT users.idUser AS userId, games.idGame AS gameId, users.userName AS userName, games.title AS gameTitle 
-                                FROM gameHasUsers 
-                                JOIN users ON gameHasUsers.idUser = users.idUser
-                                JOIN games ON gameHasUsers.idGame = games.idGame`;
 
-    // Query to fetch all users
-    let query2 = `SELECT idUser, userName FROM users`;
 
-    // Query to fetch all games
-    let query3 = `SELECT idGame, title FROM games`;
+// Routes for stats page 
+app.get('/stats', function(req, res) {
+    let userGamesQuery = `SELECT games.idGame AS gameId, users.idUser AS userId, users.userName AS userName, games.title AS gameTitle 
+                          FROM gameHasUsers 
+                          JOIN users ON gameHasUsers.idUser = users.idUser
+                          JOIN games ON gameHasUsers.idGame = games.idGame`;
 
-    // Execute the first query
-    db.pool.query(query1, function(error, userGamesResults) {
+    let usersQuery = `SELECT idUser, userName FROM users`;
+    let gamesQuery = `SELECT idGame, title FROM games`;
+
+    db.pool.query(userGamesQuery, function(error, userGamesResults) {
         if (error) {
             console.error(error);
             return res.sendStatus(500);
         }
 
-        // Execute the second query
-        db.pool.query(query2, function(error, usersResults) {
+        db.pool.query(usersQuery, function(error, usersResults) {
             if (error) {
                 console.error(error);
                 return res.sendStatus(500);
             }
 
-            // Execute the third query
-            db.pool.query(query3, function(error, gamesResults) {
+            db.pool.query(gamesQuery, function(error, gamesResults) {
                 if (error) {
                     console.error(error);
                     return res.sendStatus(500);
                 }
 
-                // Render the stats view with all necessary data
-                res.render('stats', { 
-                    userGames: userGamesResults,
-                    users: usersResults,
-                    games: gamesResults 
-                });
+                res.render('stats', { userGames: userGamesResults, users: usersResults, games: gamesResults });
             });
         });
     });
 });
 
 
-app.post('/add-user-game', function(req, res) {
-    let userId = req.body.userId;
-    let gameId = req.body.gameId;
-    let insertQuery = 'INSERT INTO gameHasUsers (idUser, idGame) VALUES (?, ?)';
+app.put('/put-user-gameId', function(req, res, next) {
+    let data = req.body;
+    let idGame = parseInt(data.gameId); 
+    let idUser = parseInt(data.userId);
+    let newGameId = parseInt(data.newgameId);
 
-    db.pool.query(insertQuery, [userId, gameId], function(error, results) {
+    let updateUserGameQuery = `UPDATE gameHasUsers SET idGame = ? WHERE idUser = ? and idGame = ?`;
+    let tableData = `SELECT games.idGame AS gameId, users.idUser AS userId,  games.title AS gameTitle, users.userName AS userName 
+                    FROM gameHasUsers 
+                    JOIN users ON gameHasUsers.idUser = users.idUser
+                    JOIN games ON gameHasUsers.idGame = games.idGame
+                    WHERE games.idGame = ? AND users.idUser = ?;`;
+
+    db.pool.query(updateUserGameQuery, [newGameId, idUser, idGame], function(error) {
+        if (error) {
+            console.log(error);
+            res.status(400).send('Error updating user-game relationship');
+        }  
+        else {
+            // Run the second query
+            db.pool.query(tableData, [newGameId, idUser], function(error, rows, fields) {
+    
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.send(rows);
+                }
+            }); 
+        }
+    });
+});
+
+
+
+app.post('/add-user-game', function(req, res) {
+    let insertUserGameQuery = 'INSERT INTO gameHasUsers (idGame, idUser) VALUES (?, ?)';
+    let { userId, gameId } = req.body;
+
+    db.pool.query(insertUserGameQuery, [gameId, userId], function(error) {
         if (error) {
             console.error(error);
             return res.sendStatus(500);
@@ -169,14 +185,12 @@ app.post('/add-user-game', function(req, res) {
     });
 });
 
-app.delete('/delete-user-game', function(req, res, next){
-    let data = req.body;
-    let userId = parseInt(data.idUser);
-    let gameId = parseInt(data.idGame);
-    let delete_user_game = `DELETE FROM gameHasUsers WHERE idUser = ? AND idGame = ?`;
-  
-    // Run the query
-    db.pool.query(delete_user_game, [userId, gameId], function(error, rows, fields){
+
+app.delete('/delete-user-game', function(req, res) {
+    let deleteUserGameQuery = `DELETE FROM gameHasUsers WHERE idUser = ? AND idGame = ?`;
+    let { idUser, idGame } = req.body;
+
+    db.pool.query(deleteUserGameQuery, [idUser, idGame], function(error) {
         if (error) {
             console.log(error);
             res.sendStatus(400);
@@ -186,10 +200,9 @@ app.delete('/delete-user-game', function(req, res, next){
     });
 });
 
-
 /*
-    LISTENER
+    Start Express Server
 */
-app.listen(PORT, function(){
-    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+app.listen(PORT, function() {
+    console.log(`Express started on http://localhost:${PORT}; press Ctrl-C to terminate.`);
 });
