@@ -26,24 +26,52 @@
         <thead>
             <tr>
                 <th>Review ID</th>
+                <th>Name</th>
                 <th>Game Title</th>
-                <th>Developer Name</th>
+                <th>Rating</th>
                 <th>Review</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            {{#each reviews}}
+            {{#each dataTable}}
             <tr>
-                <td>{{this.idReview}}</td>
-                <td>{{this.gameTitle}}</td>
-                <td>{{this.developerName}}</td>
+                <td>{{this.reviewId}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.rating}}</td>
                 <td>{{this.comment}}</td>
-                <td><button onclick="editReview({{this.idReview}})">Edit</button></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
+
+    <h2>Add Review</h2>
+    <form id="add-review-form" method="POST" action="/add-review">
+
+        <label for="input-user">User: </label>
+        <select name="input-user" id="input-user">
+            <option value="">Select User</option>
+                {{#each users}}
+                <option value="{{this.idUser}}">{{this.name}}</option>
+                {{/each}}
+        </select>
+        
+        <label for="input-game">Game: </label>
+        <select name="input-game" id="input-game">
+            <option value="">Select Game</option>
+                {{#each gameData}}
+                <option value="{{this.idGame}}">{{this.title}}</option>
+                {{/each}}
+        </select>
+
+        <label for="input-rating">Rating (1-10):</label>
+        <input type="number" name="input-rating" id="input-rating" min="1" max="10" required>
+
+         <label for="input-comment">Comment:</label>
+         <textarea name="input-comment" id="input-comment" rows="4" required></textarea>
+
+        <input type="submit">
+    </form>
     
 </body>
 </html>

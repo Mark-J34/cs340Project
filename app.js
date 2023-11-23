@@ -88,23 +88,54 @@ app.delete('/delete-game', function(req, res) {
 });
 
 // Routes for review page
-app.get('/reviews', (req, res) => {
-    let reviewsQuery = `SELECT reviews.idReview, games.title AS gameTitle, developers.name AS developerName, reviews.comment
+app.get('/reviews', function(req, res)  {
+    let query1 = `SELECT reviews.idReview AS reviewId, users.userName As name, games.title AS title, reviews.rating AS rating, reviews.comment AS comment
                         FROM reviews
                         JOIN games ON reviews.idGame = games.idGame
-                        JOIN developers ON games.idDeveloper = developers.idDeveloper;`;
+                        JOIN users On reviews.idUser = users.idUser;`;
 
-    db.pool.query(reviewsQuery, (error, reviews) => {
-        if (error) {
-            console.error(error);
-            res.sendStatus(500);
-        } else {
-            res.render('reviews', { reviews: reviews });
+    let query2 = 'SELECT idGame, title FROM games';
+
+    let query3 = 'SELECT idUser, userName AS name FROM users'
+
+    db.pool.query(query1, function(err, tableData) {
+        if (err) {
+            console.error(err);
+            return res.sendStatus(500);
         }
-    });
+        
+        db.pool.query(query2, function(err, games){
+            if (err) {
+                console.error(err);
+                return res.sendStatus(500);
+            }
+            
+            db.pool.query(query3, function(err, userInfo){
+                if (err) {
+                    console.error(err);
+                    return res.sendStatus(500);
+                }
+                
+                res.render('reviews', { dataTable: tableData, gameData: games, users: userInfo});
+            })
+        })
+    })
 });
 
+app.post('/add-review', function(req, res) {
+    let data = req.body
 
+    let query = `INSERT INTO reviews (idGame, idUser, rating, comment) VALUES ('${data['input-game']}', '${data['input-user']}', '${data['input-rating']}', '${data['input-comment']}')`;
+
+    db.pool.query(query, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/reviews');
+        }
+    });
+})
 
 
 // Routes for stats page 
@@ -176,7 +207,6 @@ app.put('/put-user-gameId', function(req, res, next) {
 });
 
 
-
 app.post('/add-user-game', function(req, res) {
     let insertUserGameQuery = 'INSERT INTO gameHasUsers (idGame, idUser) VALUES (?, ?)';
     let { userId, gameId } = req.body;
@@ -239,7 +269,7 @@ app.delete('/delete-developer', function(req, res) {
         if (error) {
             console.log(error);
         } else {
-            res.redirect('/developers')
+            res.sendStatus(204);
         }
     })
 })
