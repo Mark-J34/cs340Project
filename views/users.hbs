@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Users</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/style.css'>
+</head>
+<body>
+    <h1>Users</h1>
+
+    <nav id="navigation-links">
+        <ul>
+            <li><a href="/">Games</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/developers">Developers</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/stats">Stats</a></li>  
+        </ul>
+    </nav>
+
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Account Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each userData}}
+                <tr data-value="{{this.idUser}}">
+                    <td>{{this.idUser}}</td>
+                    <td>{{this.userName}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.registrationDate}}</td>
+                    <td><button onclick="deleteUser({{this.idUser}})">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        <script src="./js/deleteUser.js"></script>
+
+        <h2>Add Game</h2>
+    <form id="add-user-form" method="POST" action="/add-user">
+        <label for="input-name">Name</label>
+        <input type="text" name="input-name" id="input-name">
+        
+        <label for="input-email">Email: </label>
+        <input type="email" name="input-email" id="input-email">
+
+        <label for="input-registration">Date Create: </label>
+        <input type="date" name="input-registration" id="input-registration">
+
+        <input type="submit">
+    </form>
+    
+</body>
+</html>

@@ -135,8 +135,21 @@ app.post('/add-review', function(req, res) {
             res.redirect('/reviews');
         }
     });
-})
+});
 
+app.delete('/delete-review', function(req, res) {
+    let reviewId = parseInt(req.body.idReview);
+    let query = 'DELETE FROM reviews WHERE idReview = ?';
+
+    db.pool.query(query, [reviewId], function(err) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(400);
+        } else {
+            res.sendStatus(204);
+        }
+    });
+});
 
 // Routes for stats page 
 app.get('/stats', function(req, res) {
@@ -246,7 +259,7 @@ app.delete('/delete-user-game', function(req, res) {
         } 
         res.render('developers', {data: developerInfo});
     })
- })
+ });
 
  app.post('/add-developer', function(req, res) {
     let data = req.body;
@@ -259,7 +272,7 @@ app.delete('/delete-user-game', function(req, res) {
         } 
         res.redirect('/developers')
     })
-})
+});
 
 app.delete('/delete-developer', function(req, res) {
     let developerId = parseInt(req.body.idDeveloper);
@@ -272,10 +285,49 @@ app.delete('/delete-developer', function(req, res) {
             res.sendStatus(204);
         }
     })
+});
+
+// Users section
+app.get('/users', function(req, res) {
+    let query1 = 'SELECT * FROM users';
+
+    db.pool.query(query1, function(err, users) {
+        if (err) {
+            console.error(err);
+            return res.sendStatus(500);
+        }
+        res.render('users', { userData: users });
+    })
 })
+
+app.post('/add-user', function(req, res) {
+    let data = req.body
+
+    let query = `INSERT INTO users (userName, email, registrationDate) VALUES ('${data['input-name']}', '${data['input-email']}', '${data['input-registration']}')`;
+
+    db.pool.query(query, function(error, rows) {
+        if (error) {
+            console.log(error)
+        } 
+        res.redirect('/users')
+    })
+});
     
+app.delete('/delete-user', function(req, res) {
+    let userId = parseInt(req.body.idUser);
+    console.log(userId)
+    let query = 'DELETE FROM users WHERE idUser = ?';
+
+    db.pool.query(query, [userId], function(err) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(400);
+        } else {
+            res.sendStatus(204); 
+        }
+    })
+})
    
- 
 /*
     Start Express Server
 */

@@ -34,16 +34,19 @@
         </thead>
         <tbody>
             {{#each dataTable}}
-            <tr>
+            <tr data-value={{this.reviewId}}>
                 <td>{{this.reviewId}}</td>
                 <td>{{this.name}}</td>
                 <td>{{this.title}}</td>
                 <td>{{this.rating}}</td>
                 <td>{{this.comment}}</td>
+                <td><button onclick="deleteReview({{this.reviewId}})">Delete</button></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
+
+    <script src="./js/deleteReview.js"></script>
 
     <h2>Add Review</h2>
     <form id="add-review-form" method="POST" action="/add-review">
