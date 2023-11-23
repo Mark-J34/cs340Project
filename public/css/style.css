@@ -100,5 +100,9 @@ h1 {
       width: 100%;
     }
   }
+
+  td {
+    padding: 18px;
+}
   
 

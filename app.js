@@ -71,13 +71,18 @@ app.post('/add-game', function(req, res) {
 app.delete('/delete-game', function(req, res) {
     let gameID = parseInt(req.body.idGame);
     let deleteGameQuery = `DELETE FROM games WHERE idGame = ?`;
+
+    if (isNaN(gameID)) {
+        console.log("Invalid gameID: ", req.body.idGame);
+        return res.status(400).send("Invalid game ID");
+    }
   
     db.pool.query(deleteGameQuery, [gameID], function(error) {
         if (error) {
             console.log(error);
             res.sendStatus(400);
         } else {
-            res.redirect('/');
+            res.sendStatus(204);
         }
     });
 });
@@ -200,6 +205,47 @@ app.delete('/delete-user-game', function(req, res) {
     });
 });
 
+ // Developers section 
+ app.get('/developers', function(req, res) {
+    let query1 = 'Select * from developers';
+
+    db.pool.query(query1, function(error, developerInfo){
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } 
+        res.render('developers', {data: developerInfo});
+    })
+ })
+
+ app.post('/add-developer', function(req, res) {
+    let data = req.body;
+
+    let query = `INSERT INTO developers (name, foundedDate, country) VALUES ('${data['name']}', '${data['dateCreated']}', '${data['country']}')`;
+
+    db.pool.query(query, function(error, rows) {
+        if (error) {
+            console.log(error)
+        } 
+        res.redirect('/developers')
+    })
+})
+
+app.delete('/delete-developer', function(req, res) {
+    let developerId = parseInt(req.body.idDeveloper);
+    let query = 'DELETE FROM developers WHERE idDeveloper = ?';
+
+    db.pool.query(query, [developerId], function(error) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.redirect('/developers')
+        }
+    })
+})
+    
+   
+ 
 /*
     Start Express Server
 */

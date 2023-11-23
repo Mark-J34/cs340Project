@@ -26,16 +26,17 @@ function deleteGame(gameID) {
 }
 
 
+
 function deleteRow(gameID){
 
-    let table = document.getElementById("game-table");
-    for (let i = 0, row; row = table.rows[i]; i++) {
-       //iterate through rows
-       //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == gameID) {
-            table.deleteRow(i);
-            break;
-       }
-    }
+  let table = document.getElementById("game-table");
+  for (let i = 0, row; row = table.rows[i]; i++) {
+     //iterate through rows
+     //rows would be accessed using the "row" variable assigned in the for loop
+     if (table.rows[i].getAttribute("data-value") == gameID) {
+          console.log("found item in row")
+          table.deleteRow(i);
+          break;
+     }
+  }
 }
-
