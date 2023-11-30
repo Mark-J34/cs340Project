@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Port configuration
-const PORT = 8103;
+const PORT = 8104;
 
 // Database configuration
 var db = require('./database/db-connector');
