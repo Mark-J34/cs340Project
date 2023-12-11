@@ -50,8 +50,8 @@ CREATE TABLE reviews (
 
 -- Many to Many table for games and users
 CREATE TABLE gameHasUsers (
-    idGame INT,
-    idUser INT,
+    idGame INT NOT NULL,
+    idUser INT NOT NULL,
     PRIMARY KEY (idGame, idUser),
     FOREIGN KEY (idGame) REFERENCES games(idGame) ON DELETE CASCADE,
     FOREIGN KEY (idUser) REFERENCES users(idUser) ON DELETE CASCADE

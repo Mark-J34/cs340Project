@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Port configuration
-const PORT = 8104;
+const PORT = 8035;
 
 // Database configuration
 var db = require('./database/db-connector');
@@ -50,22 +50,28 @@ app.get('/', function(req, res) {
 });
 
 app.post('/add-game', function(req, res) {
-    // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    // Construct your query
+    // Validation
+    if (!data['input-title'] || !data['input-date'] || !data['input-genre'] || !data['input-developer']) {
+        console.log("Invalid input: One or more fields are empty");
+        return res.status(400).send("Invalid input: One or more fields are empty");
+    }
+
+    
     let query = `INSERT INTO games (title, releaseDate, genre, idDeveloper) VALUES ('${data['input-title']}', '${data['input-date']}', '${data['input-genre']}', '${data['input-developer']}')`;
 
     // Run the query on your database
     db.pool.query(query, function(error, rows, fields) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
+            res.sendStatus(500); 
         } else {
-            res.redirect('/');
+            res.redirect('/'); 
         }
     });
 });
+
 
 
 app.delete('/delete-game', function(req, res) {
@@ -151,7 +157,7 @@ app.delete('/delete-review', function(req, res) {
     });
 });
 
-// Routes for stats page 
+// Stats page section
 app.get('/stats', function(req, res) {
     let userGamesQuery = `SELECT games.idGame AS gameId, users.idUser AS userId, users.userName AS userName, games.title AS gameTitle 
                           FROM gameHasUsers 
@@ -264,14 +270,21 @@ app.delete('/delete-user-game', function(req, res) {
  app.post('/add-developer', function(req, res) {
     let data = req.body;
 
+    // Validation
+    if (!data['name'] || !data['dateCreated'] || !data['country']) {
+        console.log("Invalid input: One or more fields are empty");
+        return res.status(400).send("One or more fields are empty");
+    }
+
     let query = `INSERT INTO developers (name, foundedDate, country) VALUES ('${data['name']}', '${data['dateCreated']}', '${data['country']}')`;
 
     db.pool.query(query, function(error, rows) {
         if (error) {
-            console.log(error)
+            console.log(error);
+            return res.status(500).send("Database error");
         } 
-        res.redirect('/developers')
-    })
+        res.redirect('/developers');
+    });
 });
 
 app.delete('/delete-developer', function(req, res) {
@@ -301,17 +314,29 @@ app.get('/users', function(req, res) {
 })
 
 app.post('/add-user', function(req, res) {
-    let data = req.body
+    let data = req.body;
+
+    if (!data['input-name'] || !data['input-email'] || !data['input-registration']) {
+        console.log("Invalid input: One or more fields are empty");
+        return res.status(400).send("Invalid input: One or more fields are empty");
+    }
 
     let query = `INSERT INTO users (userName, email, registrationDate) VALUES ('${data['input-name']}', '${data['input-email']}', '${data['input-registration']}')`;
 
     db.pool.query(query, function(error, rows) {
         if (error) {
-            console.log(error)
+            if (error.code === 'ER_DUP_ENTRY') {
+                console.log("Duplicate entry for userName or email");
+                return res.status(409).send("User already exists");
+            }
+
+            console.log(error);
+            return res.status(500).send("Database error");
         } 
-        res.redirect('/users')
-    })
+        res.redirect('/users');
+    });
 });
+
     
 app.delete('/delete-user', function(req, res) {
     let userId = parseInt(req.body.idUser);
